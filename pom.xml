@@ -28,7 +28,7 @@
 
     <properties>
         <file.encoding>utf-8</file.encoding>
-        <java.version>1.8</java.version>
+        <java.version>1.7</java.version>
 
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
         <ci-build-id>${env.BUILD_ID}</ci-build-id>
@@ -298,7 +298,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-client</artifactId>
-            <version>9.3.7.v20160115</version>
+            <version>9.2.22.v20170606</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
