@@ -86,7 +86,7 @@ In order to submit HTTPS requests, you need to use the usual JVM properties to s
 JVMARGS="$JVMARGS -Djavax.net.debug=ssl,handshake" # for debug output
 JVMARGS="$JVMARGS -Djavax.net.ssl.keyStore=mykeystore.jks -Djavax.net.ssl.keyStorePassword=changeit"
 
-java \
+java $JVMARGS \
     -jar jcurl-all.jar \
     -H "accept: application/xml" \
     --engine url \
