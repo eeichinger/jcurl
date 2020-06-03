@@ -43,6 +43,14 @@ public class JCurl {
     final OptionSpec<String> headerSpec;
     @NonNull
     final OptionSpec<String> engineOptionSpec;
+    @NonNull
+    final OptionSpec<String> consumerKeySpec;
+    @NonNull
+    final OptionSpec<String> consumerSecretSpec;
+    @NonNull
+    final OptionSpec<String> userTokenSpec;
+    @NonNull
+    final OptionSpec<String> userSecretSpec;
 
     public JCurl() {
         parser = new OptionParser();
@@ -65,6 +73,22 @@ public class JCurl {
                     "\n'okhttp': OkHttp" +
                     "\n'jetty': Jetty"
             )
+            .withRequiredArg()
+            .ofType(String.class);
+        consumerKeySpec = parser
+            .acceptsAll(asList("consumerKey", "ck"), "OAuth consumer key")
+            .withRequiredArg()
+            .ofType(String.class);
+        consumerSecretSpec = parser
+            .acceptsAll(asList("consumerSecret", "cs"), "OAuth consumer secret")
+            .withRequiredArg()
+            .ofType(String.class);
+        userTokenSpec = parser
+            .acceptsAll(asList("userToken", "ut"), "OAuth user token")
+            .withRequiredArg()
+            .ofType(String.class);
+        userSecretSpec = parser
+            .acceptsAll(asList("userSecret", "us"), "OAuth user secret")
             .withRequiredArg()
             .ofType(String.class);
     }
@@ -107,6 +131,15 @@ public class JCurl {
                     options.setHeader(vals[0].trim(), vals[1].trim());
                 }
             }
+        }
+
+        if (optionSet.has("consumerKey") && optionSet.has("consumerSecret")) {
+            options.setOAuthConsumerCredentials(new OAuthConsumerCredentials(optionSet.valueOf(consumerKeySpec),
+                    optionSet.valueOf(consumerSecretSpec)));
+        }
+        if (optionSet.has("userToken") && optionSet.has("userSecret")) {
+            options.setOAuthUserCredentials(
+                    new OAuthUserCredentials(optionSet.valueOf(userTokenSpec), optionSet.valueOf(userSecretSpec)));
         }
 
         return engineType.getEngine().submit(options);

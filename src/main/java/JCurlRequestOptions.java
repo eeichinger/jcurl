@@ -34,6 +34,8 @@ public class JCurlRequestOptions {
     private boolean parallel = false;
     private int count = 1;
     private final Map<String, String> headerMap = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+    private OAuthConsumerCredentials oAuthConsumerCredentials;
+    private OAuthUserCredentials oAuthUserCredentials;
 
     public JCurlRequestOptions() {
         headerMap.put("User-Agent", USER_AGENT);
