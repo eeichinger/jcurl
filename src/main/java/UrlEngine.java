@@ -15,19 +15,29 @@
  */
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import oauth.signpost.OAuth;
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.basic.DefaultOAuthConsumer;
+import oauth.signpost.http.HttpParameters;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
+import java.util.Random;
+import java.util.SortedSet;
 
 /**
  * @author Erich Eichinger
  * @since 01/03/2016
  */
 public class UrlEngine implements Engine {
+    private Random random = new Random();
+
     @Override
     public ResponseEntity<String> submit(JCurlRequestOptions requestOptions) throws Exception {
         System.setProperty("http.keepAlive", "true");
@@ -37,6 +47,29 @@ public class UrlEngine implements Engine {
 
         for (int i=0;i< requestOptions.getCount();i++) {
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            OAuthConsumerCredentials oAuthConsumerCredentials = requestOptions.getOAuthConsumerCredentials();
+            if (oAuthConsumerCredentials != null) {
+                OAuthConsumer consumer = new DefaultOAuthConsumer(oAuthConsumerCredentials.getConsumerKey(),
+                        oAuthConsumerCredentials.getConsumerSecret());
+                OAuthUserCredentials oAuthUserCredentials = requestOptions.getOAuthUserCredentials();
+                if (oAuthUserCredentials != null) {
+                    consumer.setTokenWithSecret(oAuthUserCredentials.getUserToken(),
+                            oAuthUserCredentials.getUserTokenSecret());
+                    HttpParameters parameters = new HttpParameters();
+                    for (Map.Entry<String, SortedSet<String>> parameterEntry : oAuthUserCredentials.getUserParameters()
+                            .entrySet()) {
+                        parameters.put(parameterEntry.getKey(), parameterEntry.getValue());
+                    }
+                    if (!parameters.containsKey(OAuth.OAUTH_NONCE)) {
+                        String nonce = generateNonce();
+                        if (StringUtils.isNotBlank(nonce)) {
+                            parameters.put(OAuth.OAUTH_NONCE, nonce, true);
+                        }
+                    }
+                    consumer.setAdditionalParameters(parameters);
+                }
+                consumer.sign(con);
+            }
 
             // add request header
             con.setRequestMethod("GET");
@@ -46,10 +79,11 @@ public class UrlEngine implements Engine {
             }
 
             System.out.println("\nSending 'GET' request to URL : " + requestOptions.getUrl());
+            long startTime = System.currentTimeMillis();
             con.connect();
 
             int responseCode = con.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
+            System.out.println("Response Code : " + responseCode + "    Total Time: " + (System.currentTimeMillis() - startTime));
 
             final InputStream is = con.getInputStream();
             String response = IOUtils.toString(is);
@@ -61,6 +95,14 @@ public class UrlEngine implements Engine {
             responseEntity = new ResponseEntity<String>(response, HttpStatus.valueOf(responseCode));
         }
         return responseEntity;
+    }
+
+    private String generateNonce() {
+        String nonce = null;
+        if (this.random != null) {
+            nonce = Long.toString(this.random.nextLong());
+        }
+        return nonce;
     }
 
 }
