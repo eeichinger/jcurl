@@ -67,18 +67,18 @@
                     <target>${java.version}</target>
                     <testSource>${java.version}</testSource>
                     <testTarget>${java.version}</testTarget>
-<!--
-                    <compilerArgs>
-                        <arg>-Werror</arg>
-                        <arg>-Xlint:all</arg>
-                        <arg>-Xlint:-processing</arg>
-                        <arg>-Xlint:-serial</arg>
-                        <arg>-Xmaxerrs</arg>
-                        <arg>20</arg>
-                        <arg>-XprintProcessorInfo</arg>
-                        <arg>-XprintRounds</arg>
-                    </compilerArgs>
--->
+                    <!--
+                                        <compilerArgs>
+                                            <arg>-Werror</arg>
+                                            <arg>-Xlint:all</arg>
+                                            <arg>-Xlint:-processing</arg>
+                                            <arg>-Xlint:-serial</arg>
+                                            <arg>-Xmaxerrs</arg>
+                                            <arg>20</arg>
+                                            <arg>-XprintProcessorInfo</arg>
+                                            <arg>-XprintRounds</arg>
+                                        </compilerArgs>
+                    -->
                     <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
@@ -93,8 +93,18 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <descriptor>src/main/assembly/test-jar-with-dependencies.xml</descriptor>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                     <archive>
                         <manifest>
                             <mainClass>JCurl</mainClass>
@@ -109,14 +119,6 @@
                     </archive>
                     <outputDirectory>${project.basedir}/target</outputDirectory>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>assembly</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
@@ -352,12 +354,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-<!--
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock</artifactId>
-            <version>2.27.2</version>
-            <scope>test</scope>
--->
+            <!--
+                        <groupId>com.github.tomakehurst</groupId>
+                        <artifactId>wiremock</artifactId>
+                        <version>2.27.2</version>
+                        <scope>test</scope>
+            -->
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8</artifactId>
             <version>2.33.2</version>
