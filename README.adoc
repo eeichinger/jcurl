@@ -20,6 +20,10 @@ In order to run tests using code as close as possible to the code used in the ap
 
 jCurl is licensed under Apache License 2.0
 
+# Compatibility
+
+jCurl is compiled against Java 8
+
 # Features
 
 Use the --help option to get a list of all features

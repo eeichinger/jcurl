@@ -50,8 +50,7 @@ public class NNIOEngine implements Engine {
             ;
 */
             if (requestOptions.getUrl().toLowerCase().startsWith("https://")) {
-                SslContext sslContext = new DefaultClientSslContext();
-                netty4ClientHttpRequestFactory.setSslContext(sslContext);
+                netty4ClientHttpRequestFactory.setSslContext(new JdkSslClientContext());
             }
             netty4ClientHttpRequestFactory.afterPropertiesSet();
 
