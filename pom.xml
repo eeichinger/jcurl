@@ -38,9 +38,10 @@
         <ci-build-revision>${env.BUILD_REVISION}</ci-build-revision>
 
         <slf4j.version>1.7.18</slf4j.version>
-        <logback.version>1.2.9</logback.version>
+        <logback.version>1.2.11</logback.version>
         <spring.version>5.3.19</spring.version>
         <netty.version>4.1.76.Final</netty.version>
+        <jetty.version>9.4.46.v20220331</jetty.version>
     </properties>
     <build>
         <finalName>jcurl</finalName>
@@ -92,7 +93,7 @@
                             <ci-build-tag>${ci-build-tag}</ci-build-tag>
                             <ci-build-url>${ci-build-url}</ci-build-url>
                             <ci-build-time>${ci-build-time}</ci-build-time>
-                            <ci-build-revision>${ci-git-revision}</ci-build-revision>
+                            <ci-build-revision>${ci-build-revision}</ci-build-revision>
                         </manifestEntries>
                     </archive>
                     <outputDirectory>${project.basedir}/target</outputDirectory>
@@ -118,6 +119,18 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>2.13.2.20220328</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-bom</artifactId>
+                <version>${jetty.version}</version>
+                <type>pom</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -125,7 +138,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.4</version>
+            <version>1.18.24</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -206,6 +219,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
             <version>4.1</version>
@@ -226,6 +244,7 @@
             <artifactId>httpcore-nio</artifactId>
             <version>4.4.4</version>
         </dependency>
+<!--
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -237,6 +256,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient-cache</artifactId>
@@ -298,7 +318,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-client</artifactId>
-            <version>9.3.7.v20160115</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -319,11 +339,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+<!--
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock</artifactId>
-            <version>1.57</version>
+            <version>2.27.2</version>
+            <scope>test</scope>
+-->
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8</artifactId>
+            <version>2.33.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
-
