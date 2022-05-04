@@ -27,10 +27,19 @@
     <description>A curl-inspired, java-based http commandline client</description>
 
     <properties>
-        <file.encoding>utf-8</file.encoding>
+        <!-- Project settings -->
+        <file.encoding>UTF-8</file.encoding>
         <java.version>1.8</java.version>
-
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${file.encoding}</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
+        <!-- ensure everywhere the same locale is used for building and testing -->
+        <user.language>en</user.language>
+        <user.country>UK</user.country>
+        <argLine>-Duser.language=${user.language} -Duser.country=${user.country} -Duser.region=${user.country}</argLine>
+
         <ci-build-id>${env.BUILD_ID}</ci-build-id>
         <ci-build-tag>${env.BUILD_TAG}</ci-build-tag>
         <ci-build-url>${env.BUILD_URL}</ci-build-url>
@@ -42,6 +51,8 @@
         <spring.version>5.3.19</spring.version>
         <netty.version>4.1.76.Final</netty.version>
         <jetty.version>9.4.46.v20220331</jetty.version>
+        <httpclient.version>4.5.13</httpclient.version>
+        <httpasyncclient.version>4.1.5</httpasyncclient.version>
     </properties>
     <build>
         <finalName>jcurl</finalName>
@@ -131,6 +142,54 @@
                 <version>${jetty.version}</version>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.4.15</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient-cache</artifactId>
+                <version>${httpclient.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpasyncclient</artifactId>
+                <version>${httpasyncclient.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpasyncclient-cache</artifactId>
+                <version>${httpasyncclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.15</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -210,65 +269,19 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.15</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient-cache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
-            <version>4.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-            <version>4.4.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore-nio</artifactId>
-            <version>4.4.4</version>
-        </dependency>
-<!--
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
--->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient-cache</artifactId>
-            <version>4.1</version>
         </dependency>
-<!--
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
--->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-transport</artifactId>
