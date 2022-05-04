@@ -58,9 +58,9 @@ Currently available engines are:
     Apache HttpAsyncClient (https://hc.apache.org/httpcomponents-asyncclient-4.1.x/index.html)
 - nnio:
     Netty 4 NIO Client (http://netty.io/wiki/user-guide-for-4.x.html#wiki-h3-10)
-- OkHttp:
+- okhttp:
     OkHttp Client (http://square.github.io/okhttp/)
-- Jetty:
+- jetty:
     Jetty Http Client (http://www.eclipse.org/jetty/documentation/current/http-client.html)
 
 
