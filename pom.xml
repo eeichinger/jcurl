@@ -35,7 +35,7 @@
         <ci-build-tag>${env.BUILD_TAG}</ci-build-tag>
         <ci-build-url>${env.BUILD_URL}</ci-build-url>
         <ci-build-time>${maven.build.timestamp}</ci-build-time>
-        <ci-svn-revision>${env.SVN_REVISION}</ci-svn-revision>
+        <ci-build-revision>${env.BUILD_REVISION}</ci-build-revision>
 
         <slf4j.version>1.7.18</slf4j.version>
         <logback.version>1.2.9</logback.version>
@@ -92,10 +92,10 @@
                             <ci-build-tag>${ci-build-tag}</ci-build-tag>
                             <ci-build-url>${ci-build-url}</ci-build-url>
                             <ci-build-time>${ci-build-time}</ci-build-time>
-                            <ci-svn-revision>${ci-svn-revision}</ci-svn-revision>
+                            <ci-build-revision>${ci-git-revision}</ci-build-revision>
                         </manifestEntries>
                     </archive>
-                    <outputDirectory>${project.basedir}</outputDirectory>
+                    <outputDirectory>${project.basedir}/target</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
