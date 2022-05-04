@@ -43,6 +43,8 @@ public class JCurl {
     final OptionSpec<String> headerSpec;
     @NonNull
     final OptionSpec<String> engineOptionSpec;
+    @NonNull
+    final OptionSpec<String> hostnamesSpec;
 
     public JCurl() {
         parser = new OptionParser();
@@ -65,6 +67,9 @@ public class JCurl {
                     "\n'okhttp': OkHttp" +
                     "\n'jetty': Jetty"
             )
+            .withRequiredArg()
+            .ofType(String.class);
+        hostnamesSpec = parser.acceptsAll(asList("hostnames", "n"), "hostnames /etc/hosts")
             .withRequiredArg()
             .ofType(String.class);
     }
@@ -107,6 +112,12 @@ public class JCurl {
                     options.setHeader(vals[0].trim(), vals[1].trim());
                 }
             }
+        }
+        
+        if (optionSet.has("hostnames")) {
+            String hostnames = optionSet.valueOf(hostnamesSpec);
+            JCurlNameService.setHostNames(hostnames);
+            System.setProperty("sun.net.spi.nameservice.provider.1", "dns,mine");
         }
 
         return engineType.getEngine().submit(options);
